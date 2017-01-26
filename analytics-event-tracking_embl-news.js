@@ -4,6 +4,8 @@
 //
 // Support contact: Ken Hawkins (khawkins@ebi.ac.uk)
 
+var trackerName = ''; // As news.embl.de uses Google Tag Manager, we will need to prefix ga('send') 
+
 // Utility method to get the last item in an array
 if (!Array.prototype.last){
   Array.prototype.last = function() {
@@ -19,7 +21,7 @@ function analyticsTrackInteraction(actedOnItem, parentContainer) {
   if (linkName.length == 0 && jQuery(actedOnItem).attr('src')) linkName = jQuery(actedOnItem).attr('src').split('/').last();
   if (linkName.length == 0 && jQuery(actedOnItem).val()) linkName = jQuery(actedOnItem).val();
 
-  ga('send', 'event', 'UI', 'UI Element / ' + parentContainer, linkName);
+  ga(trackerName+'send', 'event', 'UI', 'UI Element / ' + parentContainer, linkName);
 }
 
 // Only track these areas
@@ -27,6 +29,9 @@ function analyticsTrackInteraction(actedOnItem, parentContainer) {
 // but we're running against the page's unload -- so we need speed over elegance.
 function activateTrackers() {
 
+  // get the google tag manager name, probably something like "gtm1"
+  trackerName = ga.getAll()[0].get('name') + '.'; 
+  
   // these are the areas we intend to track on news.embl.de
 
   // Content areas
